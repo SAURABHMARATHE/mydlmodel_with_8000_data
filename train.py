@@ -134,7 +134,16 @@ with tf.Graph().as_default():
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=FLAGS.num_checkpoints)
+	
+	environment = os.environ.get('CLUSTERONE_CLOUD') or os.environ.get('TENSORPORT_CLOUD')
+        environment = 'clusterone-cloud' if environment else "local"
 
+
+        if environment == "clusterone-cloud":
+        	path = "/logs"
+    	else:
+        	path = "/tmp"
+		
         # Write vocabulary
         vocab_processor.save(os.path.join(out_dir, "vocab"))
 
